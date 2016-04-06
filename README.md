@@ -18,3 +18,8 @@ For example, if you wanted to add Spanish hints to the Aymara PO file:
 <pre>
 python pot2po.py MusicBlocks/po/MusicBlocks.pot MusicBlocks/po/ayc.po MusicBlocks/po/es.po
 </pre>
+
+Note: I am using a simple schema for TRANS notes in my code:
+<pre>
+    //.TRANS: a message to the translator goes here
+</pre>
