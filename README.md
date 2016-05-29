@@ -27,12 +27,15 @@ po2po.py will mine a PO file for msgstrs that are missing in a second
 po file.  Usage is:
 
 <pre>
-python po2po.py SourcePOFilePath TargetPOFilePath
+python po2po.py SourcePOFilePath TargetPOFilePath [-i, --ignorecase]
 </pre>
 
-The SoursePOFile is a PO file that contains potentially useful
+The SourcePOFile is a PO file that contains potentially useful
 strings. The TagetPOFile is the PO file in need of additional
 translations. Note that the result is placed in a third file, tmp.po
+
+If the --ignorecase argument is given, the case of the msgid in Source
+is ignored.
 
 Note: I am using a simple schema for TRANS notes in my code:
 <pre>

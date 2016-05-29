@@ -11,7 +11,7 @@ import re
 import sys
 
 
-def mine_from_po_to_po(oldfilename, newfilename):
+def mine_from_po_to_po(oldfilename, newfilename, ignore_case):
     oldfd = open(oldfilename, "r")
     newfd = open(newfilename, "r")
     output = open('tmp.po', "w")
@@ -22,7 +22,12 @@ def mine_from_po_to_po(oldfilename, newfilename):
             key = line[7:-2]
         if line[0:6] == 'msgstr':
             value = line[8:-2]
-            olddict[key] = value;
+            if value == '':
+                continue;
+            if ignore_case:
+                olddict[key.lower()] = value;
+            else:
+                olddict[key] = value;
 
     newdict = {}
     for line in newfd:
@@ -33,14 +38,28 @@ def mine_from_po_to_po(oldfilename, newfilename):
             value = line[8:-2]
             msgstr_flag = True
 
-        if msgstr_flag and value == '' and  key in olddict:
-            output.write('msgstr "%s"\n' % (olddict[key]))
+        if ignore_case:
+            if msgstr_flag and value == '' and  key.lower() in olddict:
+                print 'found a match for %s' % (key)
+                output.write('msgstr "%s"\n' % (olddict[key.lower()]))
+            else:
+                output.write(line);
         else:
-            output.write(line);
+            if msgstr_flag and value == '' and  key in olddict:
+                output.write('msgstr "%s"\n' % (olddict[key]))
+                print 'found a match for %s' % (key)
+            else:
+                output.write(line);
 
     output.close()
 
 
 if __name__ == '__main__':
-    ini = mine_from_po_to_po(sys.argv[1], sys.argv[2])
-    print "Finished"
+    if len(sys.argv) < 3:
+        print "po2po source target [ignorecase]"
+    elif len(sys.argv) == 4:
+        ini = mine_from_po_to_po(sys.argv[1], sys.argv[2], True)
+        print "Finished"
+    else:
+        ini = mine_from_po_to_po(sys.argv[1], sys.argv[2], False)
+        print "Finished"
