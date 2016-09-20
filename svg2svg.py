@@ -23,7 +23,8 @@ def mine_svg_file(svg_filename, po_filename):
         if line[0:5] == 'msgid':
             key = line[7:-2]
         elif line[0:6] == 'msgstr':
-            po_dict[key] = line[8:-2]
+            if line[8:-2] != '':
+                po_dict[key] = line[8:-2]
 
     # Mine strings for l23n from the svg.
     svg_list = []
