@@ -41,3 +41,12 @@ Note: I am using a simple schema for TRANS notes in my code:
 <pre>
     //.TRANS: a message to the translator goes here
 </pre>
+
+svg2svg.py will translate any strings in an SVG file based on a PO
+file. Usage is:
+
+<pre>
+python svg2svg.py SourceSVGFilePath SourcePOFilePath
+</pre>
+
+Output is an SVG file will a _ inserted at the end of the filename.
