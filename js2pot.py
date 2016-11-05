@@ -205,7 +205,8 @@ def mine_js_files(js_pathname, pot_filename):
 
     output.close()
 
-
 if __name__ == '__main__':
-    print sys.argv[2]
-    ini = mine_js_files(sys.argv[1], sys.argv[2])
+    if len(sys.argv) != 3:
+        print 'usage is: python js2pot project_path pot_path'
+    else:
+        ini = mine_js_files(sys.argv[1], sys.argv[2])
