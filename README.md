@@ -50,3 +50,12 @@ python svg2svg.py SourceSVGFilePath SourcePOFilePath
 </pre>
 
 Output is an SVG file will a _ inserted at the end of the filename.
+
+js2js.py will translate any strings in an JS file based on a PO
+file. Usage is:
+
+<pre>
+python js2js.py repoFilePath SourcePOFilePath
+</pre>
+
+Output is an JS or JSON file will a _ inserted at the end of the filename.
