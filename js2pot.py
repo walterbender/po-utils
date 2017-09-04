@@ -19,7 +19,7 @@ def mine_js_files(js_pathname, pot_filename):
     pot_list = []
 
     trans_note = []
-    pot_trans_dict = {}  # //.TRANS
+    pot_trans_dict = {}  # //.TRANS:
 
     pot_line_numbers = []
     pot_line_numbers_dict = {}
@@ -59,7 +59,7 @@ def mine_js_files(js_pathname, pot_filename):
     js_list = []
 
     trans_note = []
-    js_trans_dict = {}  # //.TRANS
+    js_trans_dict = {}  # //.TRANS:
 
     js_line_numbers = []
     js_line_numbers_dict = {}
@@ -70,7 +70,7 @@ def mine_js_files(js_pathname, pot_filename):
 
         count = 1
         for line in js_fd:
-            tmp = line.split('//.TRANS')
+            tmp = line.split('//.TRANS:')
             if len(tmp) > 1:
                 trans_note.append(tmp[1])
 
@@ -127,7 +127,7 @@ def mine_js_files(js_pathname, pot_filename):
 
         count = 1
         for line in js_fd:
-            tmp = line.split('//.TRANS')
+            tmp = line.split('//.TRANS:')
             if len(tmp) > 1:
                 trans_note.append(tmp[1])
 
@@ -187,7 +187,10 @@ def mine_js_files(js_pathname, pot_filename):
                 output.write('#.TRANS: %s' % (js_trans_dict[js_list[i]][j]))
 
         new_phrase = string.replace(js_list[i], '"', '\\"')
-        output.write('msgid "%s"\nmsgstr ""\n\n' % (new_phrase))
+        if len(new_phrase) > 0:
+            output.write('msgid "%s"\nmsgstr ""\n\n' % (new_phrase))
+        else:
+            output_write('\n')
 
     for i in range(len(pot_list)):
         if pot_list[i] in js_list:
