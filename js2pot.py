@@ -10,12 +10,13 @@ import re
 import sys
 import glob
 import string
+import codecs
 
 
 def mine_js_files(js_pathname, pot_filename):
 
     # Read data from the existing POT file
-    pot_fd = open(pot_filename, "r")
+    pot_fd = codecs.open(pot_filename, "r", "UTF-8")
     pot_list = []
 
     trans_note = []
@@ -66,7 +67,7 @@ def mine_js_files(js_pathname, pot_filename):
 
     for path in js_files:
         basename = os.path.basename(path)
-        js_fd = open(path, "r")
+        js_fd = codecs.open(path, "r", "UTF-8")
 
         count = 1
         for line in js_fd:
@@ -123,7 +124,7 @@ def mine_js_files(js_pathname, pot_filename):
 
     for path in rtp_files:
         basename = os.path.basename(path)
-        js_fd = open(path, "r")
+        js_fd = codecs.open(path, "r", "UTF-8")
 
         count = 1
         for line in js_fd:
@@ -175,7 +176,7 @@ def mine_js_files(js_pathname, pot_filename):
 
             count += 1
 
-    output = open(pot_filename + '_', 'w')
+    output = codecs.open(pot_filename + '_', 'w', "UTF-8")
     output.write(pot_header)
     
     for i in range(len(js_list)):
