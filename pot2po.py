@@ -118,7 +118,7 @@ def convert_pot_to_po(pot_filename, po_filename, trans_filename):
                 po_line_numbers_dict[key] = line_numbers
                 line_numbers = []
 
-        if not end_of_header:
+        if not (end_of_header or line[0:5] == 'msgid'):
             po_header += line
 
     po_fd.close()

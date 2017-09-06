@@ -184,7 +184,7 @@ def mine_js_files(js_pathname, pot_filename):
 
         if js_list[i] in js_trans_dict:
             for j in range(len(js_trans_dict[js_list[i]])):
-                output.write('#.TRANS: %s' % (js_trans_dict[js_list[i]][j]))
+                output.write('#.TRANS:%s' % (js_trans_dict[js_list[i]][j]))
 
         new_phrase = string.replace(js_list[i], '"', '\\"')
         if len(new_phrase) > 0:
