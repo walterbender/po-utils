@@ -10,12 +10,13 @@ import re
 import sys
 import glob
 import string
+import codecs
 
 
 def mine_svg_file(svg_filename, po_filename):
 
     # Read data from the existing PO file
-    po_fd = open(po_filename, "r")
+    po_fd = codecs.open(po_filename, "r", "UTF-8")
     po_dict = {}
 
     # Build a translation dictionary from the PO file
@@ -29,9 +30,9 @@ def mine_svg_file(svg_filename, po_filename):
     # Mine strings for l23n from the svg.
     svg_list = []
 
-    svg_fd = open(svg_filename, "r")
+    svg_fd = codecs.open(svg_filename, "r", "UTF-8")
     tmp = svg_filename.split('.');
-    output = open(tmp[0] + '_.svg', 'w')
+    output = codecs.open(tmp[0] + '_.svg', 'w', "UTF-8")
 
     count = 1
     for line in svg_fd:

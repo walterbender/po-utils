@@ -9,12 +9,13 @@
 import os
 import re
 import sys
+import codecs
 
 
 def mine_from_po_to_po(oldfilename, newfilename, ignore_case):
-    oldfd = open(oldfilename, "r")
-    newfd = open(newfilename, "r")
-    output = open('tmp.po', "w")
+    oldfd = codecs.open(oldfilename, "r", "UTF-8")
+    newfd = codecs.open(newfilename, "r", "UTF-8")
+    output = codecs.open('tmp.po', "w", "UTF-8")
 
     olddict = {}
     for line in oldfd:
