@@ -9,7 +9,75 @@ import os
 import re
 import sys
 import glob
-import string
+
+js_list = []
+
+js_trans_dict = {}  # //.TRANS:
+
+js_line_numbers = []
+js_line_numbers_dict = {}
+
+def mine_path(js_files, root_path):
+
+    trans_note = []
+    for path in js_files:
+        basename = os.path.basename(path)
+        js_fd = open(path, "r")
+
+        count = 1
+        for line in js_fd:
+            tmp = line.split('//.TRANS:')
+            if len(tmp) > 1:
+                if not tmp[1] in trans_note:
+                    trans_note.append(tmp[1])
+
+            tmp = line.split('_("')            
+            if len(tmp) > 1:
+                for i in range(len(tmp)):
+                    if i == 0:
+                        continue
+                    phrase = tmp[i].split('")')[0];
+
+                    line_number = '%s/%s:%d' % (root_path, basename, count)
+                    if phrase in js_list:
+                        if not line_number in js_line_numbers_dict[phrase]:
+                            js_line_numbers_dict[phrase].append(line_number)
+                    else:
+                        js_list.append(phrase)
+                        js_line_numbers_dict[phrase] = [line_number]
+
+                    if len(trans_note) > 0:
+                        if phrase in js_trans_dict:
+                            for note in trans_note:
+                                js_trans_dict[phrase].append(note)
+                        else:
+                            js_trans_dict[phrase] = trans_note
+                        trans_note = []
+
+            tmp = line.split("_('")            
+            if len(tmp) > 1:
+                for i in range(len(tmp)):
+                    if i == 0:
+                        continue
+                    phrase = tmp[i].split("')")[0];
+
+                    line_number = '%s/%s:%d' % (root_path, basename, count)
+                    if phrase in js_list:
+                        if not line_number in js_line_numbers_dict[phrase]:
+                            js_line_numbers_dict[phrase].append(line_number)
+                    else:
+                        js_list.append(phrase)
+                        js_line_numbers_dict[phrase] = [line_number]
+
+                    if len(trans_note) > 0:
+                        if phrase in js_trans_dict:
+                            for note in trans_note:
+                                js_trans_dict[phrase].append(note)
+                        else:
+                            js_trans_dict[phrase] = trans_note
+                        trans_note = []
+
+            count += 1
 
 
 def mine_js_files(js_pathname, pot_filename):
@@ -52,128 +120,39 @@ def mine_js_files(js_pathname, pot_filename):
         if not end_of_header:
             pot_header += line
     
-    # Mine strings for l23n from js files.
     js_files = glob.glob(os.path.join(js_pathname, 'js', '*js'))
-    print js_files
+    print(js_files)
+    mine_path(js_files, "js")
 
-    js_list = []
+    js_files = glob.glob(os.path.join(js_pathname, 'js/utils', '*js'))
+    print(js_files)
+    mine_path(js_files, "js/utils")
 
-    trans_note = []
-    js_trans_dict = {}  # //.TRANS:
+    js_files = glob.glob(os.path.join(js_pathname, 'js/blocks', '*js'))
+    print(js_files)
+    mine_path(js_files, "js/blocks")
 
-    js_line_numbers = []
-    js_line_numbers_dict = {}
+    js_files = glob.glob(os.path.join(js_pathname, 'js/turtleactions', '*js'))
+    print(js_files)
+    mine_path(js_files, "js/turtleactions")
 
-    for path in js_files:
-        basename = os.path.basename(path)
-        js_fd = open(path, "r")
+    js_files = glob.glob(os.path.join(js_pathname, 'js/widgets', '*js'))
+    print(js_files)
+    mine_path(js_files, "js/widgets")
 
-        count = 1
-        for line in js_fd:
-            tmp = line.split('//.TRANS:')
-            if len(tmp) > 1:
-                trans_note.append(tmp[1])
+    js_files = glob.glob(os.path.join(js_pathname, 'js/js-export', '*js'))
+    print(js_files)
+    mine_path(js_files, "js/js-export")
 
-            tmp = line.split('_("')            
-            if len(tmp) > 1:
-                for i in range(len(tmp)):
-                    if i == 0:
-                        continue
-                    phrase = tmp[i].split('")')[0];
-
-                    if phrase in js_list:
-                        js_line_numbers_dict[phrase].append('js/%s:%d' % (basename, count))
-                    else:
-                        js_list.append(phrase)
-                        js_line_numbers_dict[phrase] = ['js/%s:%d' % (basename, count)]
-
-                    if len(trans_note) > 0:
-                        if phrase in js_trans_dict:
-                            for note in trans_note:
-                                js_trans_dict[phrase].append(note)
-                        else:
-                            js_trans_dict[phrase] = trans_note
-                        trans_note = []
-
-            tmp = line.split("_('")            
-            if len(tmp) > 1:
-                for i in range(len(tmp)):
-                    if i == 0:
-                        continue
-                    phrase = tmp[i].split("')")[0];
-
-                    if phrase in js_list:
-                        js_line_numbers_dict[phrase].append('js/%s:%d' % (basename, count))
-                    else:
-                        js_list.append(phrase)
-                        js_line_numbers_dict[phrase] = ['js/%s:%d' % (basename, count)]
-
-                    if len(trans_note) > 0:
-                        if phrase in js_trans_dict:
-                            for note in trans_note:
-                                js_trans_dict[phrase].append(note)
-                        else:
-                            js_trans_dict[phrase] = trans_note
-                        trans_note = []
-
-            count += 1
+    js_files = glob.glob(os.path.join(js_pathname, 'planet/js', '*js'))
+    print(js_files)
+    mine_path(js_files, "planet/js")
 
     rtp_files = glob.glob(os.path.join(js_pathname, 'plugins', '*rtp'))
-    print rtp_files
+    print(rtp_files)
+    mine_path(rtp_files, "plugins")
 
-    for path in rtp_files:
-        basename = os.path.basename(path)
-        js_fd = open(path, "r")
 
-        count = 1
-        for line in js_fd:
-            tmp = line.split('//.TRANS:')
-            if len(tmp) > 1:
-                trans_note.append(tmp[1])
-
-            tmp = line.split('_("')            
-            if len(tmp) > 1:
-                for i in range(len(tmp)):
-                    if i == 0:
-                        continue
-                    phrase = tmp[i].split('")')[0];
-
-                    if phrase in js_list:
-                        js_line_numbers_dict[phrase].append('plugins/%s:%d' % (basename, count))
-                    else:
-                        js_list.append(phrase)
-                        js_line_numbers_dict[phrase] = ['plugins/%s:%d' % (basename, count)]
-
-                    if len(trans_note) > 0:
-                        if phrase in js_trans_dict:
-                            for note in trans_note:
-                                js_trans_dict[phrase].append(note)
-                        else:
-                            js_trans_dict[phrase] = trans_note
-                        trans_note = []
-
-            tmp = line.split("_('")            
-            if len(tmp) > 1:
-                for i in range(len(tmp)):
-                    if i == 0:
-                        continue
-                    phrase = tmp[i].split("')")[0];
-
-                    if phrase in js_list:
-                        js_line_numbers_dict[phrase].append('plugins/%s:%d' % (basename, count))
-                    else:
-                        js_list.append(phrase)
-                        js_line_numbers_dict[phrase] = ['plugins/%s:%d' % (basename, count)]
-
-                    if len(trans_note) > 0:
-                        if phrase in js_trans_dict:
-                            for note in trans_note:
-                                js_trans_dict[phrase].append(note)
-                        else:
-                            js_trans_dict[phrase] = trans_note
-                        trans_note = []
-
-            count += 1
 
     output = open(pot_filename + '_', 'w')
     output.write(pot_header)
@@ -186,7 +165,8 @@ def mine_js_files(js_pathname, pot_filename):
             for j in range(len(js_trans_dict[js_list[i]])):
                 output.write('#.TRANS:%s' % (js_trans_dict[js_list[i]][j]))
 
-        new_phrase = string.replace(js_list[i], '"', '\\"')
+        # new_phrase = string.replace(js_list[i], '"', '\\"')
+        new_phrase = js_list[i].replace('"', '\\"')
         if len(new_phrase) > 0:
             output.write('msgid "%s"\nmsgstr ""\n\n' % (new_phrase))
         else:
@@ -210,6 +190,6 @@ def mine_js_files(js_pathname, pot_filename):
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
-        print 'usage is: python js2pot project_path pot_path'
+        print('usage is: python js2pot project_path pot_path')
     else:
         ini = mine_js_files(sys.argv[1], sys.argv[2])
