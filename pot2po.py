@@ -66,7 +66,7 @@ def convert_pot_to_po(pot_filename, po_filename, trans_filename):
 
     po_fd = open(po_filename, 'r')
     po_dict = {}
-    po_header = ''
+    po_header = "msgid \"\"\nmsgstr \"\"\n"
 
     trans_note = []
     po_trans_dict = {}  # //.TRANS
