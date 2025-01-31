@@ -8,7 +8,7 @@ import os
 
 from ConvertPOtoINI import convert_po_to_ini
 
-print "Saving to myini.ini"
+print("Saving to myini.ini")
 
 try:
     os.remove("myini.ini")
@@ -27,16 +27,16 @@ for fil_e in dirlist:
         try:
             txt = convert_po_to_ini(fil_e)
             total += 1
-            print "Successfully converted %s." % fil_e
+            print("Successfully converted %s." % fil_e)
         except:
-            print "Error with %s." % fil_e
+            print("Error with %s." % fil_e)
             continue
 
         final_ini += txt[0] + "\n"
-        print fil_e
+        print(fil_e)
 
 if not total:
-    print "No PO or POT files to convert."
+    print("No PO or POT files to convert.")
     exit()
 text_n = open("myini.ini", "w")
 text_n.write(final_ini)

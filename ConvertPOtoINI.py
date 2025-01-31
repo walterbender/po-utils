@@ -57,4 +57,4 @@ if __name__ == '__main__':
     text_n = open(ini[1] + ".ini", "w")
     text_n.write(ini[0])
     text_n.close()
-    print "Finished"
+    print("Finished")
