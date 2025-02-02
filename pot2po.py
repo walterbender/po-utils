@@ -7,6 +7,7 @@
 
 # Outputs to po-file.po_
 
+import argparse
 import os
 import re
 import sys
@@ -66,7 +67,7 @@ def convert_pot_to_po(pot_filename, po_filename, trans_filename):
 
     po_fd = codecs.open(po_filename, 'r', 'UTF-8')
     po_dict = {}
-    po_header = ''
+    po_header = "msgid \"\"\nmsgstr \"\"\n"
 
     trans_note = []
     po_trans_dict = {}  # //.TRANS
@@ -166,7 +167,10 @@ def convert_pot_to_po(pot_filename, po_filename, trans_filename):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 4:
-        ini = convert_pot_to_po(sys.argv[1], sys.argv[2], sys.argv[3])
-    else:
-        ini = convert_pot_to_po(sys.argv[1], sys.argv[2], '')
+    parser = argparse.ArgumentParser(description="Update PO files from POT.")
+    parser.add_argument("pot", type=str, help="path to pot file")
+    parser.add_argument("po", type=str, help="path to po file")
+    parser.add_argument("--trans", type=str, default="", help="po file to use for trans notes")
+    args = parser.parse_args()
+
+    convert_pot_to_po(args.pot, args.po, args.trans)
