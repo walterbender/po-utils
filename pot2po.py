@@ -11,12 +11,13 @@ import argparse
 import os
 import re
 import sys
+import codecs
 
 
 def convert_pot_to_po(pot_filename, po_filename, trans_filename):
 
     # Read data from the existing POT file
-    pot_fd = open(pot_filename, 'r')
+    pot_fd = codecs.open(pot_filename, 'r', 'UTF-8')
     pot_list = []
 
     trans_note = []
@@ -48,7 +49,7 @@ def convert_pot_to_po(pot_filename, po_filename, trans_filename):
     if trans_filename == '':
         trans_dict = {}
     else:
-        trans_fd = open(trans_filename, 'r')
+        trans_fd = codecs.open(trans_filename, 'r', 'UTF-8')
 
         trans_dict = {}
 
@@ -64,7 +65,7 @@ def convert_pot_to_po(pot_filename, po_filename, trans_filename):
 
         trans_fd.close()
 
-    po_fd = open(po_filename, 'r')
+    po_fd = codecs.open(po_filename, 'r', 'UTF-8')
     po_dict = {}
     po_header = "msgid \"\"\nmsgstr \"\"\n"
 
@@ -124,7 +125,7 @@ def convert_pot_to_po(pot_filename, po_filename, trans_filename):
 
     po_fd.close()
 
-    output = open(po_filename + '_', 'w')
+    output = codecs.open(po_filename + '_', 'w', 'UTF-8')
     output.write(po_header)
 
     for i in range(len(pot_list)):

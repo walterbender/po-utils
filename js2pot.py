@@ -9,6 +9,7 @@ import os
 import re
 import sys
 import glob
+import codecs
 
 js_list = []
 
@@ -22,7 +23,7 @@ def mine_path(js_files, root_path):
     trans_note = []
     for path in js_files:
         basename = os.path.basename(path)
-        js_fd = open(path, "r")
+        js_fd = codecs.open(path, "r", "UTF-8")
 
         count = 1
         for line in js_fd:
@@ -83,7 +84,7 @@ def mine_path(js_files, root_path):
 def mine_js_files(js_pathname, pot_filename):
 
     # Read data from the existing POT file
-    pot_fd = open(pot_filename, "r")
+    pot_fd = codecs.open(pot_filename, "r", "UTF-8")
     pot_list = []
 
     trans_note = []
@@ -152,9 +153,7 @@ def mine_js_files(js_pathname, pot_filename):
     print(rtp_files)
     mine_path(rtp_files, "plugins")
 
-
-
-    output = open(pot_filename + '_', 'w')
+    output = codecs.open(pot_filename + '_', 'w', "UTF-8")
     output.write(pot_header)
     
     for i in range(len(js_list)):
@@ -165,7 +164,6 @@ def mine_js_files(js_pathname, pot_filename):
             for j in range(len(js_trans_dict[js_list[i]])):
                 output.write('#.TRANS:%s' % (js_trans_dict[js_list[i]][j]))
 
-        # new_phrase = string.replace(js_list[i], '"', '\\"')
         new_phrase = js_list[i].replace('"', '\\"')
         if len(new_phrase) > 0:
             output.write('msgid "%s"\nmsgstr ""\n\n' % (new_phrase))

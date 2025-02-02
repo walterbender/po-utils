@@ -12,12 +12,13 @@ import re
 import sys
 import glob
 import string
+import codecs
 
 
 def mine_js_file(js_pathname, po_filename):
 
     # Read data from the existing PO file
-    po_fd = open(po_filename, "r")
+    po_fd = codecs.open(po_filename, "r", "UTF-8")
     po_dict = {}
 
     # Build a translation dictionary from the PO file
@@ -35,9 +36,9 @@ def mine_js_file(js_pathname, po_filename):
 
     for path in js_files:
         basename = os.path.basename(path)
-        js_fd = open(path, "r")
+        js_fd = codecs.open(path, "r", "UTF-8")
 
-        output = open(path[0:-3] + '_.js', 'w')
+        output = codecs.open(path[0:-3] + '_.js', 'w', "UTF-8")
 
         for line in js_fd:
             tmp = line.split("_('")
@@ -90,9 +91,9 @@ def mine_js_file(js_pathname, po_filename):
 
     for path in json_files:
         basename = os.path.basename(path)
-        js_fd = open(path, "r")
+        js_fd = codecs.open(path, "r", "UTF-8")
 
-        output = open(path[0:-5] + '_.json', 'w')
+        output = codecs.open(path[0:-5] + '_.json', 'w', "UTF-8")
 
         for line in js_fd:
             tmp = line.split("_('")
